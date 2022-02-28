@@ -59,7 +59,12 @@ function draw(){
                 || yPos + bird.height >= cvs.height - fg.height){
                     
                     console.log(100);
-                    location.reload();
+                    location.reload() = function(){
+                        while(true){
+                            
+                        }
+                    };
+
         }
 
         if (pipe[i].x == 5){
@@ -70,7 +75,7 @@ function draw(){
 
     var t2 = ((new Date).getTime() - t1)/100;
 
-    console.log(t2);
+    //console.log(t2);
 
     if (schet > 0){
         yPos -= t2*3;
