@@ -18,8 +18,8 @@ var gap = 90;
 
 var xPos = 10;
 var yPos = 150;
-
 var grav = 1.5;
+
 document.addEventListener("keydown",moveUp);
 document.addEventListener("click",moveUp);
 var t1 = (new Date).getTime();
@@ -38,20 +38,7 @@ pipe[0]={
 function draw(){
     ctx.drawImage(bg,0,0);
     for (var i = 0; i < pipe.length; i++){
-
-        ctx.drawImage(pipeUp, pipe[i].x,pipe[i].y);
-        ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap);
-        pipe[i].x-=1;
-
-        if (pipe[i].x == 100){
-            pipe.push({
-                x: cvs.width,
-                y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height 
-            });
-        }
-        if (pipe.length > 3){
-            pipe.shift()
-        }
+         
         if (xPos + bird.width >= pipe[i].x 
             && xPos <= pipe[i].x + pipeUp.width 
             && (yPos <= pipe[i].y + pipeUp.height 
@@ -68,6 +55,21 @@ function draw(){
                     }
                     score = 0;
                     t1 = (new Date).getTime();
+
+        }
+
+        ctx.drawImage(pipeUp, pipe[i].x,pipe[i].y);
+        ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap);
+        pipe[i].x-=1;
+
+        if (pipe[i].x == 100){
+            pipe.push({
+                x: cvs.width,
+                y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height 
+            });
+        }
+        if (pipe.length > 2){
+            pipe.shift()
         }
 
         if (pipe[i].x == 5){
