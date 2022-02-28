@@ -58,13 +58,16 @@ function draw(){
                 || yPos + bird.height >= pipe[i].y + pipeUp.height+gap) 
                 || yPos + bird.height >= cvs.height - fg.height){
                     
-                    console.log(100);
-                    location.reload() = function(){
-                        while(true){
-                            
-                        }
-                    };
+                    xPos = 10;
+                    yPos = 150;
+                    pipe = [];
 
+                    pipe[0]={
+                        x: cvs.width,
+                        y: 0
+                    }
+                    score = 0;
+                    t1 = (new Date).getTime();
         }
 
         if (pipe[i].x == 5){
