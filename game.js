@@ -19,12 +19,14 @@ var xPos = 10;
 var yPos = 150;
 
 var grav = 1.5;
-document.addEventListener("keydown",moveUp)
-
+document.addEventListener("keydown",moveUp);
+document.addEventListener("click",moveUp);
 var t1 = (new Date).getTime();
+var schet = 0;
 function moveUp(){
     t1 = (new Date).getTime();
-    yPos -= 20;
+    schet = 10;
+    //yPos -= 20;
 }
 var pipe = [];
 
@@ -40,7 +42,7 @@ function draw(){
         ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap);
         pipe[i].x-=1;
 
-        if (pipe[i].x == 125){
+        if (pipe[i].x == 100){
             pipe.push({
                 x: cvs.width,
                 y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height 
@@ -72,9 +74,15 @@ function draw(){
 
     console.log(t2);
 
-    if ( t2 > 1 ){
-        yPos += t2;
+    if (schet > 0){
+        yPos -= t2*3;
+        schet-=1;
     }
+
+        if ( t2 > 2 ){
+            yPos += t2/1.2;
+        }
+
 
 
     ctx.fillStyle = "#000";
