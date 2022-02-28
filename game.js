@@ -57,19 +57,16 @@ function draw(){
             && (yPos <= pipe[i].y + pipeUp.height 
                 || yPos + bird.height >= pipe[i].y + pipeUp.height+gap) 
                 || yPos + bird.height >= cvs.height - fg.height){
-            location.reload();
+                    
+                    console.log(100);
+                    location.reload();
         }
 
         if (pipe[i].x == 5){
             score++;
         }
-
+    
     }
-
-
-
-    ctx.drawImage(fg,0,cvs.height - fg.height);
-    ctx.drawImage(bird,xPos,yPos);
 
     var t2 = ((new Date).getTime() - t1)/100;
 
@@ -83,6 +80,9 @@ function draw(){
         if ( t2 > 2 ){
             yPos += t2/1.2;
         }
+
+    ctx.drawImage(fg,0,cvs.height - fg.height);
+    ctx.drawImage(bird,xPos,yPos);
 
 
 
