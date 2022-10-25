@@ -1,5 +1,7 @@
 // 288  512 
-console.log('123456789')
+//git add -A
+//git commit -m ""
+//git push
 vkBridge.send("VKWebAppInit", {});
 vkBridge.subscribe((e) => {
     console.log('bridge event', e);
