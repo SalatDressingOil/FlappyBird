@@ -1,4 +1,10 @@
-// 288  512
+// 288  512 
+console.log('123456789')
+vkBridge.send("VKWebAppInit", {});
+vkBridge.subscribe((e) => {
+    console.log('bridge event', e);
+  });
+
 var cvs = document.getElementById("canvas");
 var ctx = cvs.getContext("2d");
 
