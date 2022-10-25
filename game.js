@@ -3,7 +3,7 @@
 //git commit -m ""
 //git push
 vkBridge.send("VKWebAppInit", {});
-bridge.send('VKWebAppGetFriends')
+vkBridge.send('VKWebAppGetFriends')
   .then((data) => { 
     if (data.users) {
         console.log(data.users)
