@@ -3,21 +3,14 @@
 //git commit -m ""
 //git push
 vkBridge.send("VKWebAppInit", {});
-vkBridge.send('VKWebAppGetFriends')
-  .then((data) => { 
-    if (data.users) {
-        console.log(data.users)
-      // Данные о пользователях получены
-    }
-  })
-  .catch((error) => {
-    // Ошибка
-    console.log(error);
-  });
 vkBridge.subscribe((e) => {
     console.log('bridge event', e);
   });
 
+  
+vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
 var cvs = document.getElementById("canvas");
 var ctx = cvs.getContext("2d");
 
