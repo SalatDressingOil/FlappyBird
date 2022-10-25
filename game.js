@@ -3,6 +3,17 @@
 //git commit -m ""
 //git push
 vkBridge.send("VKWebAppInit", {});
+bridge.send('VKWebAppGetFriends')
+  .then((data) => { 
+    if (data.users) {
+        console.log(data.users)
+      // Данные о пользователях получены
+    }
+  })
+  .catch((error) => {
+    // Ошибка
+    console.log(error);
+  });
 vkBridge.subscribe((e) => {
     console.log('bridge event', e);
   });
