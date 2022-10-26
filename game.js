@@ -4,9 +4,27 @@
 //git push
 
 vkBridge.send("VKWebAppInit", {});
-vkBridge.subscribe((e) => {
-    console.log('bridge event', e);
+vkBridge.subscribe(event => {
+    if (!event.detail) {
+      return;
+    }
+  
+    switch(event.detail.type) {
+      case 'VKWebAppOpenCodeReaderResult':
+        if (event.detail.data.result) {
+          // Обработка события в случае успеха
+          console.log(event.detail.data.result);
+        } else {
+          // Ошибка
+        }
+        break;
+      case 'VKWebAppOpenCodeReaderFailed':
+        // Обработка события в случае ошибки
+        console.log(event.detail.data.error_type, event.detail.data.error_data);      
+        break;
+    }
   });
+
 var bird = new Image();
 bird.src = "img/bird.png";
 var bg = new Image();
