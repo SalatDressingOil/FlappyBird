@@ -6,7 +6,6 @@ vkBridge.send("VKWebAppInit", {});
 vkBridge.subscribe((e) => {
     console.log('bridge event', e);
   });
-vkBridge.send("VKWebAppResizeWindow", {"width": 320, "height": 720});
 vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
@@ -18,6 +17,7 @@ var zn1 = innerWidth/innerHeight
 
 cvs.height*=zn
 cvs.width*=zn
+vkBridge.send("VKWebAppResizeWindow", {"width": cvs.width, "height": cvs.height});
 
 var ctx = cvs.getContext("2d");
 ctx.fillStyle = "#000";
