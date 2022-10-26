@@ -6,8 +6,8 @@ vkBridge.send("VKWebAppInit", {});
 vkBridge.subscribe((e) => {
     console.log('bridge event', e);
   });
-  
-bridge.send("VKWebAppResizeWindow", {"width": 432, "height": 768});
+
+vkBridge.send("VKWebAppResizeWindow", {"width": 432, "height": 768});
 vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
