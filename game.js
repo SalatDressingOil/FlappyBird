@@ -6,7 +6,7 @@ vkBridge.send("VKWebAppInit", {});
 vkBridge.subscribe((e) => {
     console.log('bridge event', e);
   });
-vkBridge.send("VKWebAppResizeWindow", {"width": 648, "height": 1152});
+vkBridge.send("VKWebAppResizeWindow", {"width": 320, "height": 720});
 vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
@@ -29,7 +29,7 @@ pipeBottom.src = "img/pipeBottom.png";
 
 var score = 0;
 
-var gap = 210;
+var gap = 186;
 
 var xPos = 20;
 var yPos = 150;
@@ -44,7 +44,7 @@ var t2 = 0;
 var k = 0;
 
 var z = 3;
-var non = 1
+var non = 10
 var schet = 1;
 var pixel_pipe_move = 3
 
@@ -83,7 +83,7 @@ function draw(){
                     xPos = 20;
                     yPos = 150;
 
-                    schet = 0;
+                    schet = 1;
                     non=10 
                     z=3
 
@@ -103,18 +103,19 @@ function draw(){
         if (pipe[i].x<-pipeUp.width){
             pipe.shift()
         }
+        console.log(pipe[i].x,pixel_pipe_move,pipe[i].x/pixel_pipe_move,pipe.length,pipe[i].x,pipe[i].y)
         ctx.drawImage(pipeUp, pipe[i].x,pipe[i].y);
         ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap - pipe[i].gap_ran);
         pipe[i].x-=pixel_pipe_move;
 
-        if (pipe[i].x/pixel_pipe_move == 60){
+        if (pipe[i].x == 80){
             pipe.push({
                 gap_ran: Math.random()*10,
                 x: cvs.width,
                 y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
             });
         }
-        if (pipe[i].x == 18){
+        if (pipe[i].x == 23){
             score++;
         }
     
