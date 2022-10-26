@@ -21,33 +21,41 @@ var bg = new Image();
 var fg = new Image();
 var pipeUp = new Image();
 var pipeBottom = new Image();
+
 bird.src = "img/bird.png";
 bg.src = "img/bg.png"; 
 fg.src = "img/fg.png"; 
 pipeUp.src = "img/pipeUp.png"; 
-pipeBottom.src = "img/pipeBottom.png"; 
+pipeBottom.src = "img/pipeBottom.png";
+
 var score = 0;
 
-var gap = 90;
+var gap = 168;
 
-var xPos = 10;
+var xPos = 20;
 var yPos = 150;
-var grav = 1.5;
+var grav = 1;
 
 document.addEventListener("keydown",moveUp);
 document.addEventListener("click",moveUp);
+var pi_180 = Math.PI/180
+
 var t1 = (new Date).getTime();
 var t2 = 0;
 var k = 0;
-var z = 5;
-var schet = 0;
-var pi_180 = Math.PI/180
+
+var z = 3;
+var non = 1
+var schet = 1;
+var pixel_pipe_move = 3
+
 function moveUp(){
     console.log('click')
     //alert('click')
     t1 = (new Date).getTime();
-    schet = 10;
-    z=5
+    schet = 15;
+    non=1
+    z=3
     //yPos -= 20;
 }
 var pipe = [];
@@ -60,14 +68,19 @@ function draw(){
     ctx.drawImage(bg,0,0);
     for (var i = 0; i < pipe.length; i++){
          
-        if (xPos + bird.width >= pipe[i].x 
+        if (xPos + bird.width-5 >= pipe[i].x 
             && xPos <= pipe[i].x + pipeUp.width 
             && (yPos <= pipe[i].y + pipeUp.height 
-                || yPos + bird.height >= pipe[i].y + pipeUp.height+gap) 
-                || yPos + bird.height >= cvs.height - fg.height){
+                || yPos + bird.height-5 >= pipe[i].y + pipeUp.height+gap) 
+                || yPos + bird.height-5 >= cvs.height - fg.height){
                     
-                    xPos = 10;
+                    xPos = 20;
                     yPos = 150;
+
+                    schet = 0;
+                    non=10 
+                    z=3
+
                     pipe = [];
 
                     pipe[0]={
@@ -79,22 +92,22 @@ function draw(){
                     k=0
 
         }
-
+        console.log(pipe.length , pipe[i].x/3,pipe[i].y)
+        if (pipe[i].x<-pipeUp.width){
+            pipe.shift()
+            
+        }
         ctx.drawImage(pipeUp, pipe[i].x,pipe[i].y);
         ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap);
-        pipe[i].x-=1;
+        pipe[i].x-=pixel_pipe_move;
 
-        if (pipe[i].x == 100){
+        if (pipe[i].x/pixel_pipe_move == 60){
             pipe.push({
                 x: cvs.width,
                 y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height 
             });
         }
-        if (pipe.length > 2){
-            pipe.shift()
-        }
-
-        if (pipe[i].x == 5){
+        if (pipe[i].x == 18){
             score++;
         }
     
@@ -102,23 +115,30 @@ function draw(){
 
     t2 = ((new Date).getTime() - t1)/100;
     if (schet > 0){
-        yPos -= t2*3;
-        schet-=1;
-        if (k>-10){
-            k-=10
+        yPos -= t2*schet ;
+        //console.log(t2,schet,t2*schet)
+        schet-=(t2*schet)/5;
+        if (k>-3){
+            k-=8
         }
     }
     else{
-        if (z>=3){
-            z-=1
+        if (non>0){
+            non-=1
+            k+=1
         }
-        if (k<85){
-            k+=z
+        else{
+            if (z>=3){
+                z-=1
+            }
+            if (k<85){
+                k+=z
+            }
         }
     }
-    console.log(schet,k)
+    //console.log(schet,k)
         if ( t2 > 2 ){
-            yPos += t2/1.2;
+            yPos += t2*grav;
         }
     ctx.drawImage(fg,0,cvs.height - fg.height);
     //xPos=0
