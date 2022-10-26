@@ -2,10 +2,39 @@
 //git add -A
 //git commit -m ""
 //git push
+
 vkBridge.send("VKWebAppInit", {});
 vkBridge.subscribe((e) => {
     console.log('bridge event', e);
   });
+var bird = new Image();
+bird.src = "img/bird.png";
+var bg = new Image();
+bg.src = "img/bg.png"; 
+var fg = new Image();
+fg.src = "img/fg.png"; 
+var pipeUp = new Image();
+pipeUp.src = "img/pipeUp.png"; 
+var pipeBottom = new Image();
+pipeBottom.src = "img/pipeBottom.png";
+
+function no_zero_img_size() {
+    console.log('non-load')
+    if (pipeBottom.width==0){
+        setTimeout(no_zero_img_size, 20);
+    }
+    else{
+        var imgM = [bird,bg,fg,pipeUp,pipeBottom]
+        console.log(imgM.length)
+        for (var i=0;i<imgM.length;i++){
+            imgM[i].width*=zn
+            imgM[i].height*=zn
+            console.log(imgM[i].width)
+        }
+    }
+  }
+setTimeout(no_zero_img_size, 20);
+
 vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
@@ -14,7 +43,6 @@ vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 var cvs = document.getElementById("canvas");
 var zn = cvs.height/cvs.width;
 var zn1 = innerWidth/innerHeight
-
 cvs.height*=zn
 cvs.width*=zn
 vkBridge.send("VKWebAppResizeWindow", {"width": cvs.width, "height": cvs.height});
@@ -23,26 +51,12 @@ var ctx = cvs.getContext("2d");
 ctx.fillStyle = "#000";
 ctx.font = 30*zn+"px Verdana";
 
-console.log(zn,zn1)
-console.log(innerWidth,innerHeight)
-console.log(cvs.width,cvs.height)
+//console.log(zn,zn1)
+//console.log(innerWidth,innerHeight)
+//console.log(cvs.width,cvs.height)
 
-var bird = new Image();
-var bg = new Image();
-var fg = new Image();
-var pipeUp = new Image();
-var pipeBottom = new Image();
 
-bird.src = "img/bird.png";
-bg.src = "img/bg.png"; 
-fg.src = "img/fg.png"; 
-pipeUp.src = "img/pipeUp.png"; 
-pipeBottom.src = "img/pipeBottom.png";
-var aa = [bird,bg,fg,pipeUp,pipeBottom]
-for (var i=0;i<aa.length;i++){
-    aa[i].width*=zn
-    aa[i].height*=zn
-}
+//pipeBottom.onload = function(){}
 
 /*
 var zn = bg.width/bg.height
@@ -114,6 +128,7 @@ pipe.push({
     y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
 });
 //ctx.scale(2.5,2.5)
+
 function draw(){
     //ctx.save();
     //ctx.clearCanvas();
