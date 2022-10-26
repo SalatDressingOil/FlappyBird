@@ -6,13 +6,13 @@ vkBridge.send("VKWebAppInit", {});
 vkBridge.subscribe((e) => {
     console.log('bridge event', e);
   });
-
-
-  var delayInMilliseconds = 1000; //1 second
-
+  
+bridge.send("VKWebAppResizeWindow", {"width": 432, "height": 768});
 vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
+
+
 var cvs = document.getElementById("canvas");
 var ctx = cvs.getContext("2d");
 
@@ -92,7 +92,7 @@ function draw(){
                     k=0
 
         }
-        console.log(pipe.length , pipe[i].x/3,pipe[i].y)
+        //console.log(pipe.length , pipe[i].x/3,pipe[i].y)
         if (pipe[i].x<-pipeUp.width){
             pipe.shift()
             
