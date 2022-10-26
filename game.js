@@ -81,9 +81,12 @@ var pi_180 = Math.PI/180
 var t1 = (new Date).getTime();
 var t2 = 0;
 var k = 0;
+var creat_board_int = 0;
 
-var z = 3;
-var non = 10
+
+
+var z = 3*zn;
+var non = 10*zn
 var schet = 1*zn;
 var pixel_pipe_move = 3*zn
 
@@ -92,8 +95,8 @@ function moveUp(){
     //alert('click')
     t1 = (new Date).getTime();
     schet = 15*zn;
-    non=1*zn
-    z=3*zn
+    non = 1*zn
+    z = 3*zn
     //yPos -= 20;
 }
 var pipe = [];
@@ -152,19 +155,19 @@ function draw(){
         if (pipe[i].x<-pipeUp.width){
             pipe.shift()
         }
-        console.log(pipe[i].x,pixel_pipe_move,pipe[i].x/pixel_pipe_move,pipe.length,pipe[i].x,pipe[i].y)
+        //console.log(pipe[i].x,pixel_pipe_move,pipe[i].x/pixel_pipe_move,pipe.length,pipe[i].x,pipe[i].y)
         ctx.drawImage(pipeUp, pipe[i].x,pipe[i].y,pipeUp.width,pipeUp.height);
         ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap - pipe[i].gap_ran,pipeBottom.width,pipeBottom.height);
         pipe[i].x-=pixel_pipe_move;
-
-        if (Math.round(pipe[i].x/pixel_pipe_move) == 27){
+        creat_board_int = Math.round(pipe[i].x/pixel_pipe_move)
+        if (creat_board_int == 27){
             pipe.push({
                 gap_ran: Math.random()*10,
                 x: cvs.width,
                 y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
             });
         }
-        if (pipe[i].x == 23){
+        if (creat_board_int == 20){
             score++;
         }
     
