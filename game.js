@@ -6,8 +6,7 @@ vkBridge.send("VKWebAppInit", {});
 vkBridge.subscribe((e) => {
     console.log('bridge event', e);
   });
-
-vkBridge.send("VKWebAppResizeWindow", {"width": 432, "height": 768});
+vkBridge.send("VKWebAppResizeWindow", {"width": 648, "height": 1152});
 vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
@@ -30,7 +29,7 @@ pipeBottom.src = "img/pipeBottom.png";
 
 var score = 0;
 
-var gap = 168;
+var gap = 210;
 
 var xPos = 20;
 var yPos = 150;
@@ -60,18 +59,25 @@ function moveUp(){
 }
 var pipe = [];
 
+/*
 pipe[0]={
+    gap_ran: 0,
     x: cvs.width,
-    y: 0
+    y: 0,
 }
+*/
+pipe.push({
+    gap_ran: Math.random()*10,
+    x: cvs.width,
+    y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
+});
 function draw(){
     ctx.drawImage(bg,0,0);
     for (var i = 0; i < pipe.length; i++){
-         
         if (xPos + bird.width-5 >= pipe[i].x 
             && xPos <= pipe[i].x + pipeUp.width 
             && (yPos <= pipe[i].y + pipeUp.height 
-                || yPos + bird.height-5 >= pipe[i].y + pipeUp.height+gap) 
+                || yPos + bird.height-5 >= pipe[i].y + pipeUp.height+gap-pipe[i].gap_ran) 
                 || yPos + bird.height-5 >= cvs.height - fg.height){
                     
                     xPos = 20;
@@ -82,10 +88,11 @@ function draw(){
                     z=3
 
                     pipe = [];
-
+                    
                     pipe[0]={
+                        gap_ran: Math.random()*10,
                         x: cvs.width,
-                        y: 0
+                        y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
                     }
                     score = 0;
                     t1 = (new Date).getTime();
@@ -95,16 +102,16 @@ function draw(){
         //console.log(pipe.length , pipe[i].x/3,pipe[i].y)
         if (pipe[i].x<-pipeUp.width){
             pipe.shift()
-            
         }
         ctx.drawImage(pipeUp, pipe[i].x,pipe[i].y);
-        ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap);
+        ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap - pipe[i].gap_ran);
         pipe[i].x-=pixel_pipe_move;
 
         if (pipe[i].x/pixel_pipe_move == 60){
             pipe.push({
+                gap_ran: Math.random()*10,
                 x: cvs.width,
-                y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height 
+                y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
             });
         }
         if (pipe[i].x == 18){
@@ -154,9 +161,9 @@ function draw(){
     //ctx.fillRect(xPos+bird.width/2,yPos+bird.height/2,5,5)
 
     ctx.fillStyle = "#000";
-    ctx.font = "20px Verdana";
-
-    ctx.fillText("Счет: " + score, 10, cvs.height - 20);
+    ctx.font = "30px Verdana";
+    //ctx.strokeText("Счет: " + score, 10, cvs.height - 20);
+    ctx.fillText("Счет: " + score, 10, cvs.height - 20, 1000);
     requestAnimationFrame(draw);
 };
 pipeBottom.onload = draw();
