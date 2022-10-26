@@ -5,6 +5,7 @@
 
 vkBridge.send("VKWebAppInit", {});
 vkBridge.subscribe(event => {
+    console.log('standartn_sub_bridge',event)
     if (!event.detail) {
       return;
     }
