@@ -41,8 +41,21 @@ vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 
 
 var cvs = document.getElementById("canvas");
-var zn = cvs.height/cvs.width;
-var zn1 = innerWidth/innerHeight
+//var zn = cvs.height/cvs.width;
+
+var min_zn = 0
+var max_zn = 0
+if (innerHeight<innerWidth){
+    max_zn=innerHeight
+    min_zn=innerWidth
+}
+else{
+    max_zn=innerWidth
+    min_zn=innerHeight
+}
+
+var zn = min_zn/max_zn
+zn=zn*0.97
 cvs.height*=zn
 cvs.width*=zn
 vkBridge.send("VKWebAppResizeWindow", {"width": cvs.width, "height": cvs.height});
