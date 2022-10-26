@@ -17,7 +17,6 @@ var pipeUp = new Image();
 pipeUp.src = "img/pipeUp.png"; 
 var pipeBottom = new Image();
 pipeBottom.src = "img/pipeBottom.png";
-
 function no_zero_img_size() {
     console.log('non-load')
     if (pipeBottom.width==0){
@@ -33,7 +32,6 @@ function no_zero_img_size() {
         }
     }
   }
-setTimeout(no_zero_img_size, 20);
 
 vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
@@ -45,17 +43,18 @@ var cvs = document.getElementById("canvas");
 
 var min_zn = 0
 var max_zn = 0
-if (innerHeight<innerWidth){
-    max_zn=innerHeight
-    min_zn=innerWidth
+if (document.documentElement.clientHeight<document.documentElement.clientWidth){
+    max_zn=document.documentElement.clientHeight
+    min_zn=document.documentElement.clientWidth
 }
 else{
-    max_zn=innerWidth
-    min_zn=innerHeight
+    max_zn=document.documentElement.clientWidth
+    min_zn=document.documentElement.clientHeight
 }
-
 var zn = min_zn/max_zn
-zn=zn*0.97
+zn*=0.97
+setTimeout(no_zero_img_size, 20);
+
 cvs.height*=zn
 cvs.width*=zn
 vkBridge.send("VKWebAppResizeWindow", {"width": cvs.width, "height": cvs.height});
