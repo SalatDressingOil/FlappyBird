@@ -2,10 +2,9 @@
 //git add -A
 //git commit -m ""
 //git push
-
+var height_ = 800
+var width_ = 480
 vkBridge.send("VKWebAppInit", {});
-var height_ = 480
-var width_ = 800
 vkBridge.send("VKWebAppResizeWindow", {"width": 480, "height": 800});
 vkBridge.subscribe(event => {
     console.log('standartn_sub_bridge',event)
@@ -73,7 +72,7 @@ if (height_==0){
     height_=innerHeight
     width_=innerWidth
 }
-if (height_<width_){
+if (height_>width_){
     max_zn=height_
     min_zn=width_
 }
@@ -81,8 +80,9 @@ else{
     max_zn=width_
     min_zn=height_
 }
-zn = min_zn/max_zn
-zn*=1
+console.log(max_zn/720,max_zn,720)
+zn = max_zn/720
+zn *= 1
 var cvs = document.getElementById("canvas");
 cvs.height*=zn
 cvs.width*=zn
