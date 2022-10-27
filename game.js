@@ -1,11 +1,11 @@
-// 288  512 
+  // 288  512 
 //git add -A
 //git commit -m ""
 //git push
-var height_ = 800
-var width_ = 480
+var height_ = 0
+var width_ = 0
 vkBridge.send("VKWebAppInit", {});
-vkBridge.send("VKWebAppResizeWindow", {"width": 480, "height": 800});
+//vkBridge.send("VKWebAppResizeWindow", {"width": 480, "height": 800});
 vkBridge.subscribe(event => {
     console.log('standartn_sub_bridge',event)
     if (!event.detail) {
@@ -35,14 +35,14 @@ vkBridge.subscribe(event => {
 
 var bird = new Image();
 bird.src = "img/bird.png";
-var bg = new Image();
-bg.src = "img/bg.png"; 
 var fg = new Image();
 fg.src = "img/fg.png"; 
 var pipeUp = new Image();
 pipeUp.src = "img/pipeUp.png"; 
 var pipeBottom = new Image();
 pipeBottom.src = "img/pipeBottom.png";
+var bg = new Image();
+bg.src = "img/bg.png"; 
 
 var score = 0;
 
@@ -65,60 +65,22 @@ var schet = 1;
 var pixel_pipe_move = 3
 
 var zn = 0
-var min_zn = 0
-var max_zn = 0
+var zn_height = 0
+var zn_width = 0
 
-if (height_==0){
-    height_=innerHeight
-    width_=innerWidth
-}
-if (height_>width_){
-    max_zn=height_
-    min_zn=width_
-}
-else{
-    max_zn=width_
-    min_zn=height_
-}
-console.log(max_zn/720,max_zn,720)
-zn = max_zn/720
-zn *= 1
 var cvs = document.getElementById("canvas");
-cvs.height*=zn
-cvs.width*=zn
+var ctx = 0;
 
-var ctx = cvs.getContext("2d");
-ctx.fillStyle = "#000";
-ctx.font = 30*zn+"px Verdana";
-
-gap *= zn
-grav *= zn
-z *= zn;
-non *= zn
-schet *= zn;
-pixel_pipe_move *= zn
-
-
-//setTimeout(vk_bridge_event_config, 1);
+var imgM = [bird,bg,fg,pipeUp,pipeBottom]
 function no_zero_img_size() {
-    console.log('non-load')
-    if (pipeBottom.width==0){
-        setTimeout(no_zero_img_size, 10);
-    }
-    else{
-        var imgM = [bird,bg,fg,pipeUp,pipeBottom]
         console.log(imgM.length)
         for (var i=0;i<imgM.length;i++){
             imgM[i].width*=zn
             imgM[i].height*=zn
-            console.log(imgM[i].width)
+            console.log("ширина",imgM[i].width)
         }
         //console.log("")
-    }
 }
-setTimeout(no_zero_img_size, 1);
-document.addEventListener("keydown",moveUp);
-document.addEventListener("click",moveUp);
 
 function moveUp(){
     console.log('click')
@@ -129,15 +91,44 @@ function moveUp(){
     z = 3*zn
     //yPos -= 20;
 }
+document.addEventListener("keydown",moveUp);
+document.addEventListener("click",moveUp);
 var pipe = [];
-pipe.push({
+//setTimeout(vk_bridge_no_event_confin, 1);
+function initdraw(){
+  zn_width = innerWidth/bg.width
+  zn_height = innerHeight/bg.height
+  if (zn_width<zn_height){
+    zn=zn_width
+  }
+  else{
+    zn=zn_height
+  }
+  console.log(zn,bg.height,bg.width,innerHeight,innerWidth)
+  zn *= 1
+  cvs.height*=zn
+  cvs.width*=zn
+
+  ctx = cvs.getContext("2d");
+  ctx.fillStyle = "#000";
+  ctx.font = 30*zn+"px Verdana";
+
+  gap *= zn
+  grav *= zn
+  z *= zn;
+  non *= zn
+  schet *= zn;
+  pixel_pipe_move *= zn
+  no_zero_img_size()
+  pipe.push({
     gap_ran: Math.random()*10,
     x: cvs.width,
     y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
-});
-
-//setTimeout(vk_bridge_no_event_confin, 1);
+  });
+  draw()
+}
 function draw(){
+    //console.log(innerWidth,innerHeight)
     //ctx.save();
     //ctx.clearCanvas();
     //ctx.scale(bg.width / cvs.width, bg.height / cvs.height);
@@ -236,11 +227,15 @@ function draw(){
 
     ctx.setTransform(1,0,0,1,0,0);
     //ctx.fillRect(xPos+bird.width/2,yPos+bird.height/2,5,5)
-    //ctx.strokeText("Счет: " + score, 10, cvs.height - 20);
-    ctx.fillText("Счет: " + score, 10, cvs.height - 20, 1000);
+    
+    ctx.strokeText("Счет: " + score, 10, cvs.height - 20);
+    //ctx.fillText("Счет: " + score, 10, cvs.height - 20, 1000);
 
     //ctx.restore();
     requestAnimationFrame(draw);
-};
-pipeBottom.onload = draw();
-
+  };
+//bg.onload = initdraw();
+window.onload= function(){
+  console.log("windowload")
+  initdraw()
+}
