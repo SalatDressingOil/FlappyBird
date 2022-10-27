@@ -67,35 +67,38 @@ var pixel_pipe_move = 3
 var zn = 0
 var min_zn = 0
 var max_zn = 0
-function vk_bridge_event_config(){
-    if (height_==0){
-        setTimeout(vk_bridge_event_config, 10);
-    }
-    else{
-        if (height_<width_){
-            max_zn=height_
-            min_zn=width_
-        }
-        else{
-            max_zn=width_
-            min_zn=height_
-        }
-        zn = min_zn/max_zn
-        zn*=0.97
-        cvs.height*=zn
-        cvs.width*=zn
-        
-        ctx.font = 30*zn+"px Verdana";
 
-        gap *= zn
-        grav *= zn
-        z *= zn;
-        non *= zn
-        schet *= zn;
-        pixel_pipe_move *= zn
-    }
+if (height_==0){
+    height_=innerHeight
+    width_=innerWidth
 }
-setTimeout(vk_bridge_event_config, 1);
+if (height_<width_){
+    max_zn=height_
+    min_zn=width_
+}
+else{
+    max_zn=width_
+    min_zn=height_
+}
+zn = min_zn/max_zn
+zn*=0.97
+var cvs = document.getElementById("canvas");
+cvs.height*=zn
+cvs.width*=zn
+
+var ctx = cvs.getContext("2d");
+ctx.fillStyle = "#000";
+ctx.font = 30*zn+"px Verdana";
+
+gap *= zn
+grav *= zn
+z *= zn;
+non *= zn
+schet *= zn;
+pixel_pipe_move *= zn
+
+
+//setTimeout(vk_bridge_event_config, 1);
 function no_zero_img_size() {
     console.log('non-load')
     if (pipeBottom.width==0){
@@ -113,51 +116,6 @@ function no_zero_img_size() {
     }
 }
 setTimeout(no_zero_img_size, 1);
-if (height_==0){
-    height_=innerHeight
-    width_=innerWidth
-}
-vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-.then(data => console.log(data.result))
-.catch(error => console.log(error));
-
-
-var cvs = document.getElementById("canvas");
-//var zn = cvs.height/cvs.width;
-//vkBridge.send("VKWebAppResizeWindow", {"width": cvs.width, "height": cvs.height});
-
-var ctx = cvs.getContext("2d");
-ctx.fillStyle = "#000";
-
-//console.log(zn,zn1)
-//console.log(innerWidth,innerHeight)
-//console.log(cvs.width,cvs.height)
-
-
-//pipeBottom.onload = function(){}
-
-/*
-var zn = bg.width/bg.height
-bg.height=innerHeight*1
-bg.width=bg.height*zn
-
-var zn = bird.width/bird.height
-bird.height=innerHeight*0.05
-bird.width=bird.height*zn
-
-var zn = fg.width/fg.height
-fg.height=innerHeight*0.05
-fg.width=fg.height*zn
-
-var zn = pipeUp.width/pipeUp.height
-pipeUp.height==innerHeight*0.05
-pipeUp.width=pipeUp.height*zn
-
-var zn = pipeBottom.width/pipeBottom.height
-pipeBottom.height=innerHeight*0.05
-pipeBottom.width=pipeBottom.height*zn
-*/
-
 document.addEventListener("keydown",moveUp);
 document.addEventListener("click",moveUp);
 
@@ -171,26 +129,12 @@ function moveUp(){
     //yPos -= 20;
 }
 var pipe = [];
-
-/*
-pipe[0]={
-    gap_ran: 0,
-    x: cvs.width,
-    y: 0,
-}
-*/
 pipe.push({
     gap_ran: Math.random()*10,
     x: cvs.width,
     y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
 });
-//ctx.scale(2.5,2.5)
-function vk_bridge_no_event_confin(){
-    if (height_==0){
-        height_=innerHeight
-        width_=innerWidth
-    }
-}
+
 //setTimeout(vk_bridge_no_event_confin, 1);
 function draw(){
     //ctx.save();
