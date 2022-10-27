@@ -81,7 +81,7 @@ else{
     min_zn=height_
 }
 zn = min_zn/max_zn
-zn*=0.97
+zn*=0.7
 var cvs = document.getElementById("canvas");
 cvs.height*=zn
 cvs.width*=zn
@@ -146,6 +146,7 @@ function draw(){
     //ctx.clearCanvas();
     //ctx.scale(1,1);
     //ctx.scale(innerWidth / cvs.width, innerHeight / cvs.height);
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
     ctx.drawImage(bg,0,0,bg.width,bg.height);
     for (var i = 0; i < pipe.length; i++){
         if (xPos + bird.width-5 >= pipe[i].x 
