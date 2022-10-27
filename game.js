@@ -102,7 +102,7 @@ var zn = 0
 var min_zn = 0
 var max_zn = 0
 
-vkBridge.send("VKWebAppResizeWindow", {"width": cvs.width, "height": cvs.height});
+//vkBridge.send("VKWebAppResizeWindow", {"width": cvs.width, "height": cvs.height});
 
 var ctx = cvs.getContext("2d");
 ctx.fillStyle = "#000";
