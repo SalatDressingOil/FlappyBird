@@ -72,7 +72,7 @@ if (height_==0){
     height_=innerHeight
     width_=innerWidth
 }
-if (height_<width_){
+if (height_>width_){
     max_zn=height_
     min_zn=width_
 }
