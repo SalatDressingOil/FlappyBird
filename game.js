@@ -16,6 +16,7 @@ vkBridge.subscribe(event => {
       case "VKWebAppUpdateConfig":
         height_ = event.detail.data.viewport_height
         width_ = event.detail.data.viewport_width
+        console.log('VKWebAppUpdateConfig:',height_,width_)
         break
       case 'VKWebAppOpenCodeReaderResult':
         if (event.detail.data.result) {
@@ -42,21 +43,6 @@ var pipeUp = new Image();
 pipeUp.src = "img/pipeUp.png"; 
 var pipeBottom = new Image();
 pipeBottom.src = "img/pipeBottom.png";
-function no_zero_img_size() {
-    console.log('non-load')
-    if (pipeBottom.width==0){
-        setTimeout(no_zero_img_size, 20);
-    }
-    else{
-        var imgM = [bird,bg,fg,pipeUp,pipeBottom]
-        console.log(imgM.length)
-        for (var i=0;i<imgM.length;i++){
-            imgM[i].width*=zn
-            imgM[i].height*=zn
-            console.log(imgM[i].width)
-        }
-    }
-  }
 
 vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
@@ -65,28 +51,10 @@ vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 
 var cvs = document.getElementById("canvas");
 //var zn = cvs.height/cvs.width;
-
+var zn = 0
 var min_zn = 0
 var max_zn = 0
-console.log(height_,width_)
-if (height_==0){
-    height_=innerHeight
-    width_=innerWidth
-}
-if (height_<width_){
-    max_zn=height_
-    min_zn=width_
-}
-else{
-    max_zn=width_
-    min_zn=height_
-}
-var zn = min_zn/max_zn
-zn*=0.97
-setTimeout(no_zero_img_size, 20);
 
-cvs.height*=zn
-cvs.width*=zn
 vkBridge.send("VKWebAppResizeWindow", {"width": cvs.width, "height": cvs.height});
 
 var ctx = cvs.getContext("2d");
@@ -124,11 +92,11 @@ pipeBottom.width=pipeBottom.height*zn
 
 var score = 0;
 
-var gap = 186*zn;
+var gap = 186;
 
 var xPos = 20;
 var yPos = 150;
-var grav = 1*zn;
+var grav = 1;
 
 document.addEventListener("keydown",moveUp);
 document.addEventListener("click",moveUp);
@@ -141,10 +109,10 @@ var creat_board_int = 0;
 
 
 
-var z = 3*zn;
-var non = 10*zn
-var schet = 1*zn;
-var pixel_pipe_move = 3*zn
+var z = 3;
+var non = 10
+var schet = 1;
+var pixel_pipe_move = 3
 
 function moveUp(){
     console.log('click')
@@ -171,6 +139,52 @@ pipe.push({
 });
 //ctx.scale(2.5,2.5)
 
+function no_zero_img_size() {
+    console.log('non-load')
+    if (pipeBottom.width==0){
+        setTimeout(no_zero_img_size, 10);
+    }
+    else{
+        var imgM = [bird,bg,fg,pipeUp,pipeBottom]
+        console.log(imgM.length)
+        for (var i=0;i<imgM.length;i++){
+            imgM[i].width*=zn
+            imgM[i].height*=zn
+            console.log(imgM[i].width)
+        }
+        console.log(height_,width_)
+    }
+}
+
+function vk_bridge_event_config(){
+    if (height_==0){
+        setTimeout(vk_bridge_event_config, 10);
+    }
+    else{
+        if (height_<width_){
+            max_zn=height_
+            min_zn=width_
+        }
+        else{
+            max_zn=width_
+            min_zn=height_
+        }
+        zn = min_zn/max_zn
+        zn*=0.97
+        cvs.height*=zn
+        cvs.width*=zn
+        
+        gap *= zn
+        grav *= zn
+        z *= zn;
+        non *= zn
+        schet *= zn;
+        pixel_pipe_move *= zn
+    }
+}
+
+setTimeout(no_zero_img_size, 1);
+setTimeout(vk_bridge_event_config, 1);
 function draw(){
     //ctx.save();
     //ctx.clearCanvas();
