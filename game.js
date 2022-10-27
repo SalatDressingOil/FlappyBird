@@ -4,6 +4,8 @@
 //git push
 
 vkBridge.send("VKWebAppInit", {});
+var height_ = 0
+var width_ = 0
 vkBridge.subscribe(event => {
     console.log('standartn_sub_bridge',event)
     if (!event.detail) {
@@ -11,6 +13,10 @@ vkBridge.subscribe(event => {
     }
   
     switch(event.detail.type) {
+      case "VKWebAppUpdateConfig":
+        height_ = event.detail.data.viewport_height
+        width_ = event.detail.data.viewport_width
+        break
       case 'VKWebAppOpenCodeReaderResult':
         if (event.detail.data.result) {
           // Обработка события в случае успеха
@@ -62,13 +68,18 @@ var cvs = document.getElementById("canvas");
 
 var min_zn = 0
 var max_zn = 0
-if (document.documentElement.clientHeight<document.documentElement.clientWidth){
-    max_zn=document.documentElement.clientHeight
-    min_zn=document.documentElement.clientWidth
+console.log(height_,width_)
+if (height_==0){
+    height_=innerHeight
+    width_=innerWidth
+}
+if (height_<width_){
+    max_zn=height_
+    min_zn=width_
 }
 else{
-    max_zn=document.documentElement.clientWidth
-    min_zn=document.documentElement.clientHeight
+    max_zn=width_
+    min_zn=height_
 }
 var zn = min_zn/max_zn
 zn*=0.97
