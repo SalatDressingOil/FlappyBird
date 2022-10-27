@@ -44,6 +44,29 @@ pipeUp.src = "img/pipeUp.png";
 var pipeBottom = new Image();
 pipeBottom.src = "img/pipeBottom.png";
 
+var score = 0;
+
+var gap = 186;
+
+var xPos = 20;
+var yPos = 150;
+var grav = 1;
+
+var pi_180 = Math.PI/180
+
+var t1 = (new Date).getTime();
+var t2 = 0;
+var k = 0;
+var creat_board_int = 0;
+
+var z = 3;
+var non = 10
+var schet = 1;
+var pixel_pipe_move = 3
+
+var zn = 0
+var min_zn = 0
+var max_zn = 0
 function vk_bridge_event_config(){
     if (height_==0){
         setTimeout(vk_bridge_event_config, 10);
@@ -90,7 +113,10 @@ function no_zero_img_size() {
     }
 }
 setTimeout(no_zero_img_size, 1);
-
+if (height_==0){
+    height_=innerHeight
+    width_=innerWidth
+}
 vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
@@ -98,10 +124,6 @@ vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 
 var cvs = document.getElementById("canvas");
 //var zn = cvs.height/cvs.width;
-var zn = 0
-var min_zn = 0
-var max_zn = 0
-
 //vkBridge.send("VKWebAppResizeWindow", {"width": cvs.width, "height": cvs.height});
 
 var ctx = cvs.getContext("2d");
@@ -136,29 +158,8 @@ pipeBottom.height=innerHeight*0.05
 pipeBottom.width=pipeBottom.height*zn
 */
 
-var score = 0;
-
-var gap = 186;
-
-var xPos = 20;
-var yPos = 150;
-var grav = 1;
-
 document.addEventListener("keydown",moveUp);
 document.addEventListener("click",moveUp);
-var pi_180 = Math.PI/180
-
-var t1 = (new Date).getTime();
-var t2 = 0;
-var k = 0;
-var creat_board_int = 0;
-
-
-
-var z = 3;
-var non = 10
-var schet = 1;
-var pixel_pipe_move = 3
 
 function moveUp(){
     console.log('click')
@@ -191,10 +192,6 @@ function vk_bridge_no_event_confin(){
     }
 }
 //setTimeout(vk_bridge_no_event_confin, 1);
-if (height_==0){
-    height_=innerHeight
-    width_=innerWidth
-}
 function draw(){
     //ctx.save();
     //ctx.clearCanvas();
