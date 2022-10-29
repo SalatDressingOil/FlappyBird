@@ -35,6 +35,7 @@ vkBridge.subscribe(event => {
 
 var bird = new Image();
 bird.src = "img/bird.png";
+//bird.src = "img/owl.gif";
 var fg = new Image();
 fg.src = "img/fg.png"; 
 var pipeUp = new Image();
@@ -83,6 +84,7 @@ function no_zero_img_size() {
 }
 
 function moveUp(){
+  if (!flag){
     console.log('click')
     //alert('click')
     t1 = (new Date).getTime();
@@ -90,10 +92,32 @@ function moveUp(){
     non = 1*zn
     z = 3*zn
     //yPos -= 20;
+  }
+  else{
+    flag = false
+    xPos = 20;
+    yPos = 150;
+
+    schet = 1*zn;
+    non=10*zn
+    z=3*zn
+
+    pipe = [];
+    
+    pipe[0]={
+        gap_ran: Math.random()*10,
+        x: cvs.width,
+        y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
+    }
+    score = 0;
+    t1 = (new Date).getTime();
+    k=0
+  }
 }
 document.addEventListener("keydown",moveUp);
 document.addEventListener("click",moveUp);
 var pipe = [];
+var particl = [];
 //setTimeout(vk_bridge_no_event_confin, 1);
 function initdraw(){
   zn_width = innerWidth/bg.width
@@ -125,28 +149,62 @@ function initdraw(){
     x: cvs.width,
     y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
   });
+  /*
+  particl.push({
+    x_z:Math.random()-0.5,
+    y_z:Math.random()-0.5,
+    x: Math.round(Math.random()*10),
+    y: Math.round(Math.random()*10),
+    rad:10
+  });
+  */
   draw()
 }
+var flag = false;
 function draw(){
-    //console.log(innerWidth,innerHeight)
-    //ctx.save();
-    //ctx.clearCanvas();
-    //ctx.scale(bg.width / cvs.width, bg.height / cvs.height);
-    //bg.width=cvs.width
-    //bg.height=cvs.height
-    //ctx.save();
-    //ctx.clearCanvas();
-    //ctx.scale(1,1);
-    //ctx.scale(innerWidth / cvs.width, innerHeight / cvs.height);
     ctx.clearRect(0, 0, cvs.width, cvs.height);
     ctx.drawImage(bg,0,0,bg.width,bg.height);
+
     for (var i = 0; i < pipe.length; i++){
         if (xPos + bird.width-5 >= pipe[i].x 
             && xPos <= pipe[i].x + pipeUp.width 
             && (yPos <= pipe[i].y + pipeUp.height 
-                || yPos + bird.height-5 >= pipe[i].y + pipeUp.height+gap-pipe[i].gap_ran) 
-                || yPos + bird.height-5 >= cvs.height - fg.height){
-                    
+                || yPos + bird.height >= pipe[i].y + pipeUp.height+gap-pipe[i].gap_ran) 
+                || yPos + bird.height >= cvs.height - fg.height){
+                  /*
+                  if (!flag){
+                    particl = [];
+                    for (var g = 0; g<20; g++){
+                      particl.push({
+                        x_z:Math.random()-0.5,
+                        y_z:Math.random()-0.5,
+                        x: xPos + Math.round((Math.random()/2)*10),
+                        y: yPos + Math.round((Math.random()/2)*10),
+                        rad:20
+                      });
+                    }
+                    console.log(particl)
+                    ctx.fillStyle="white"
+                    for (var g = 0; g<20; g+=0.1){
+                      for (var gg = 0; gg<20; gg++){
+                        ctx.fillRect(particl[gg].x, particl[gg].y, particl[gg].rad-g, particl[gg].rad-g)
+                        particl[gg].x+=particl[gg].x_z
+                        particl[gg].y+=particl[gg].y_z
+                        //console.log(g,gg)
+                      }
+                      //ctx.drawImage(bg,0,0,bg.width,bg.height);
+                    }
+                  }
+                  */
+                    flag = true
+                    grav=3
+                    schet=0
+                    non=0
+                    z=6
+                    //bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+
+
+                    /*
                     xPos = 20;
                     yPos = 150;
 
@@ -164,28 +222,30 @@ function draw(){
                     score = 0;
                     t1 = (new Date).getTime();
                     k=0
+                    */
 
         }
         //console.log(pipe.length , pipe[i].x/3,pipe[i].y)
         if (pipe[i].x<-pipeUp.width){
-            pipe.shift()
+          pipe.shift()
         }
         //console.log(pipe[i].x,pixel_pipe_move,pipe[i].x/pixel_pipe_move,pipe.length,pipe[i].x,pipe[i].y)
         ctx.drawImage(pipeUp, pipe[i].x,pipe[i].y,pipeUp.width,pipeUp.height);
-        ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap - pipe[i].gap_ran,pipeBottom.width,pipeBottom.height);
-        pipe[i].x-=pixel_pipe_move;
+        ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap - pipe[i].gap_ran,pipeBottom.width,pipeBottom.height);  
+        if (!flag){
+          pipe[i].x-=pixel_pipe_move;
+        }
         creat_board_int = Math.round(pipe[i].x/pixel_pipe_move)
         if (creat_board_int == 27){
-            pipe.push({
-                gap_ran: Math.random()*10,
-                x: cvs.width,
-                y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
-            });
+        pipe.push({
+          gap_ran: Math.random()*10,
+          x: cvs.width,
+          y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
+          });
         }
-        if (creat_board_int == 20){
-            score++;
-        }
-    
+       if (creat_board_int == 20){
+        score++;
+       }
     }
 
     t2 = ((new Date).getTime() - t1)/100;
@@ -206,28 +266,29 @@ function draw(){
             if (z>=3){
                 z-=1
             }
-            if (k<85){
+            if (k<90){
                 k+=z
+            }
+            else{
+              k=90
             }
         }
     }
     //console.log(schet,k)
-        if ( t2 > 2 ){
+        if ( t2 > 2 && !(yPos + bird.height >= cvs.height - fg.height)){
             yPos += t2*grav;
         }
     ctx.drawImage(fg,0,cvs.height - fg.height,fg.width,fg.height);
     //xPos=0
     //yPos=0
-
+    //ctx.fillRect(xPos+bird.width/2,yPos+bird.height/2,5,5)
     ctx.translate(xPos+bird.width/2,yPos+bird.height/2);
+    
     ctx.rotate(k*pi_180);
-    ctx.drawImage(bird,-bird.width / 2, -bird.height / 2, bird.width, bird.height)
+    ctx.drawImage(bird,-bird.width / 2, -bird.height / 2, bird.width, bird.height);
     //ctx.drawImage(bird,xPos,yPos);
     ctx.rotate((360-k)*pi_180);
-
     ctx.setTransform(1,0,0,1,0,0);
-    //ctx.fillRect(xPos+bird.width/2,yPos+bird.height/2,5,5)
-    
     ctx.strokeText("Счет: " + score, 10, cvs.height - 20);
     //ctx.fillText("Счет: " + score, 10, cvs.height - 20, 1000);
 
