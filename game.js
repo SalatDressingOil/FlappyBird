@@ -61,7 +61,7 @@ var k = 0;
 var creat_board_int = 0;
 
 var z = 3;
-var non = 10
+//var non = 10
 var schet = 1;
 var pixel_pipe_move = 3
 
@@ -89,7 +89,7 @@ function moveUp(){
     //alert('click')
     t1 = (new Date).getTime();
     schet = 15*zn;
-    non = 1*zn
+    //non = 1*zn
     z = 3*zn
     //yPos -= 20;
   }
@@ -99,9 +99,9 @@ function moveUp(){
     yPos = 150;
 
     schet = 1*zn;
-    non=10*zn
+    //non=10*zn
     z=3*zn
-
+    grav=1*zn
     pipe = [];
     
     pipe[0]={
@@ -140,7 +140,7 @@ function initdraw(){
   gap *= zn
   grav *= zn
   z *= zn;
-  non *= zn
+  //non *= zn
   schet *= zn;
   pixel_pipe_move *= zn
   no_zero_img_size()
@@ -164,13 +164,17 @@ var flag = false;
 function draw(){
     ctx.clearRect(0, 0, cvs.width, cvs.height);
     ctx.drawImage(bg,0,0,bg.width,bg.height);
+    var cvs_fg = cvs.height - fg.height
+    var yPos_bird = yPos + bird.height
 
+    var bool_pos = yPos_bird >= cvs_fg 
+    var bool_pos_5_zn = yPos_bird >= cvs_fg - 200*zn
     for (var i = 0; i < pipe.length; i++){
-        if (xPos + bird.width-5 >= pipe[i].x 
+        if (!flag && (xPos + bird.width-5 >= pipe[i].x 
             && xPos <= pipe[i].x + pipeUp.width 
             && (yPos <= pipe[i].y + pipeUp.height 
                 || yPos + bird.height >= pipe[i].y + pipeUp.height+gap-pipe[i].gap_ran) 
-                || yPos + bird.height >= cvs.height - fg.height){
+                || bool_pos)){
                   /*
                   if (!flag){
                     particl = [];
@@ -199,8 +203,7 @@ function draw(){
                     flag = true
                     grav=3
                     schet=0
-                    non=0
-                    z=6
+                    //non=0
                     //bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 
 
@@ -234,6 +237,9 @@ function draw(){
         ctx.drawImage(pipeBottom, pipe[i].x,pipe[i].y + pipeUp.height + gap - pipe[i].gap_ran,pipeBottom.width,pipeBottom.height);  
         if (!flag){
           pipe[i].x-=pixel_pipe_move;
+          if (creat_board_int == 20){
+            score++;
+           }
         }
         creat_board_int = Math.round(pipe[i].x/pixel_pipe_move)
         if (creat_board_int == 27){
@@ -243,41 +249,53 @@ function draw(){
           y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
           });
         }
-       if (creat_board_int == 20){
-        score++;
-       }
     }
 
     t2 = ((new Date).getTime() - t1)/100;
     if (schet > 0){
-        yPos -= t2*schet ;
-        //console.log(t2,schet,t2*schet)
-        schet-=(t2*schet)/5;
-        if (k>-3){
-            k-=8
-        }
+        var t2_schet = t2*schet
+        yPos-=t2_schet;
+        //console.log(t2,schet,t2_schet)
+        schet-=t2_schet/5;
+    }
+    if (t2<2){
+      k-=z*2
+      if (k<-15){
+        k=-15
+      }
     }
     else{
-        if (non>0){
-            non-=1
-            k+=1
-        }
-        else{
-            if (z>=3){
-                z-=1
-            }
-            if (k<90){
-                k+=z
-            }
-            else{
-              k=90
-            }
-        }
-    }
+      if (z>=3){
+        z-=1
+      } 
+      if (k<90){
+          k+=z*0.7
+      }
+      if (k>90){
+        k=90
+      }
+  }
+       // if (non>0){
+            //non-=1
+            //k+=1
+        //}
+
     //console.log(schet,k)
-        if ( t2 > 2 && !(yPos + bird.height >= cvs.height - fg.height)){
+    //console.log(t2,k,z,schet)
+        if ( t2 > 2){
+          if (!bool_pos){
             yPos += t2*grav;
+            if (yPos>cvs_fg-bird.height){
+              yPos=cvs_fg-bird.height
+            }
+          }
+          if(flag && bool_pos_5_zn){
+            console.log(1234)
+            //non=0
+            z=12*zn
+          }
         }
+        //console.log(z)
     ctx.drawImage(fg,0,cvs.height - fg.height,fg.width,fg.height);
     //xPos=0
     //yPos=0
