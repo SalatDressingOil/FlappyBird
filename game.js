@@ -108,6 +108,9 @@ function initdraw(){
 
   gap *= zn
   grav *= zn
+  min_Delta_yPos*=zn
+  max_Delta_yPos*=zn
+  Delta_delta_yPos*=zn
   z *= zn;
   //non *= zn
   schet *= zn;
@@ -134,9 +137,11 @@ var prev_inter_bird_xPos = 0
 var prev_inter_bird_yPos = 0
 var iter = 0;
 var Delta_yPos = 0
-const min_Delta_yPos = -15
-const max_Delta_yPos = 15
-var Delta_delta_yPos = 0
+
+var min_Delta_yPos = -8.5
+var max_Delta_yPos = 8.5
+
+ var Delta_delta_yPos = 0
 var grav = 3;
 function moveUp(){
   if (!flag){
@@ -243,7 +248,8 @@ function draw(){
       yPos-=Delta_yPos
       ooo=Math.atan((yPos-prev_inter_bird_yPos)/(xPos-prev_inter_bird_xPos)).toGrad()
     }
-    console.log(t2,iter,Delta_yPos,yPos,Delta_delta_yPos)
+    console.log(grav)
+    //console.log(t2,iter,Delta_yPos,yPos,Delta_delta_yPos)
 
     ctx.drawImage(fg,0,cvs.height - fg.height,fg.width,fg.height);
     //xPos=0
