@@ -2,6 +2,8 @@
 //git add -A
 //git commit -m ""
 //git push
+Number.prototype.toGrad = function () { return this * 180/Math.PI; }
+
 var height_ = 0
 var width_ = 0
 vkBridge.send("VKWebAppInit", {});
@@ -51,7 +53,6 @@ var gap = 186;
 
 var xPos = 20;
 var yPos = 150;
-var grav = 1;
 
 var pi_180 = Math.PI/180
 
@@ -81,38 +82,6 @@ function no_zero_img_size() {
             console.log("ширина",imgM[i].width)
         }
         //console.log("")
-}
-
-function moveUp(){
-  if (!flag){
-    console.log('click')
-    //alert('click')
-    t1 = (new Date).getTime();
-    schet = 15*zn;
-    //non = 1*zn
-    z = 3*zn
-    //yPos -= 20;
-  }
-  else{
-    flag = false
-    xPos = 20;
-    yPos = 150;
-
-    schet = 1*zn;
-    //non=10*zn
-    z=3*zn
-    grav=1*zn
-    pipe = [];
-    
-    pipe[0]={
-        gap_ran: Math.random()*10,
-        x: cvs.width,
-        y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
-    }
-    score = 0;
-    t1 = (new Date).getTime();
-    k=0
-  }
 }
 document.addEventListener("keydown",moveUp);
 document.addEventListener("click",moveUp);
@@ -161,19 +130,59 @@ function initdraw(){
   draw()
 }
 var flag = false;
+var prev_inter_bird_xPos = 0
+var prev_inter_bird_yPos = 0
+var iter = 0;
+var Delta_yPos = 0
+const min_Delta_yPos = -15
+const max_Delta_yPos = 15
+var Delta_delta_yPos = 0
+var grav = 3;
+function moveUp(){
+  if (!flag){
+    console.log('click')
+    //alert('click')
+    Delta_yPos = max_Delta_yPos
+    Delta_delta_yPos = 0
+    t1 = (new Date).getTime();
+    schet = 15*zn;
+    //non = 1*zn
+    z = 3*zn
+    //yPos -= 20;
+  }
+  else{
+    flag = false
+    xPos = 20;
+    yPos = 150;
+
+    schet = 1*zn;
+    //non=10*zn
+    z=3*zn
+    pipe = [];
+    
+    pipe[0]={
+        gap_ran: Math.random()*10,
+        x: cvs.width,
+        y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
+    }
+    score = 0;
+    t1 = (new Date).getTime();
+    k=0
+  }
+}
 function draw(){
     ctx.clearRect(0, 0, cvs.width, cvs.height);
     ctx.drawImage(bg,0,0,bg.width,bg.height);
+
     var cvs_fg = cvs.height - fg.height
     var yPos_bird = yPos + bird.height
-
     var bool_pos = yPos_bird >= cvs_fg 
-    var bool_pos_5_zn = yPos_bird >= cvs_fg - 200*zn
+
     for (var i = 0; i < pipe.length; i++){
         if (!flag && (xPos + bird.width-5 >= pipe[i].x 
             && xPos <= pipe[i].x + pipeUp.width 
             && (yPos <= pipe[i].y + pipeUp.height 
-                || yPos + bird.height >= pipe[i].y + pipeUp.height+gap-pipe[i].gap_ran) 
+                || yPos_bird >= pipe[i].y + pipeUp.height+gap-pipe[i].gap_ran) 
                 || bool_pos)){
                   /*
                   if (!flag){
@@ -201,34 +210,7 @@ function draw(){
                   }
                   */
                     flag = true
-                    grav=3
-                    schet=0
-                    //non=0
-                    //bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-
-
-                    /*
-                    xPos = 20;
-                    yPos = 150;
-
-                    schet = 1*zn;
-                    non=10*zn
-                    z=3*zn
-
-                    pipe = [];
-                    
-                    pipe[0]={
-                        gap_ran: Math.random()*10,
-                        x: cvs.width,
-                        y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
-                    }
-                    score = 0;
-                    t1 = (new Date).getTime();
-                    k=0
-                    */
-
         }
-        //console.log(pipe.length , pipe[i].x/3,pipe[i].y)
         if (pipe[i].x<-pipeUp.width){
           pipe.shift()
         }
@@ -252,65 +234,35 @@ function draw(){
     }
 
     t2 = ((new Date).getTime() - t1)/100;
-    if (schet > 0){
-        var t2_schet = t2*schet
-        yPos-=t2_schet;
-        //console.log(t2,schet,t2_schet)
-        schet-=t2_schet/5;
-    }
-    if (t2<2){
-      k-=z*2
-      if (k<-15){
-        k=-15
-      }
+    if (bool_pos){
+      yPos=cvs_fg-bird.height
+      ooo=90
     }
     else{
-      if (z>=3){
-        z-=1
-      } 
-      if (k<90){
-          k+=z*0.7
-      }
-      if (k>90){
-        k=90
-      }
-  }
-       // if (non>0){
-            //non-=1
-            //k+=1
-        //}
+      Delta_yPos=max_Delta_yPos+(-grav)*t2
+      yPos-=Delta_yPos
+      ooo=Math.atan((yPos-prev_inter_bird_yPos)/(xPos-prev_inter_bird_xPos)).toGrad()
+    }
+    console.log(t2,iter,Delta_yPos,yPos,Delta_delta_yPos)
 
-    //console.log(schet,k)
-    //console.log(t2,k,z,schet)
-        if ( t2 > 2){
-          if (!bool_pos){
-            yPos += t2*grav;
-            if (yPos>cvs_fg-bird.height){
-              yPos=cvs_fg-bird.height
-            }
-          }
-          if(flag && bool_pos_5_zn){
-            console.log(1234)
-            //non=0
-            z=12*zn
-          }
-        }
-        //console.log(z)
     ctx.drawImage(fg,0,cvs.height - fg.height,fg.width,fg.height);
     //xPos=0
     //yPos=0
     //ctx.fillRect(xPos+bird.width/2,yPos+bird.height/2,5,5)
     ctx.translate(xPos+bird.width/2,yPos+bird.height/2);
     
-    ctx.rotate(k*pi_180);
+    ctx.rotate(ooo*pi_180);
     ctx.drawImage(bird,-bird.width / 2, -bird.height / 2, bird.width, bird.height);
     //ctx.drawImage(bird,xPos,yPos);
-    ctx.rotate((360-k)*pi_180);
+    ctx.rotate((360-ooo)*pi_180);
     ctx.setTransform(1,0,0,1,0,0);
     ctx.strokeText("Счет: " + score, 10, cvs.height - 20);
     //ctx.fillText("Счет: " + score, 10, cvs.height - 20, 1000);
 
     //ctx.restore();
+    prev_inter_bird_xPos = xPos-pixel_pipe_move;
+    prev_inter_bird_yPos = yPos
+    iter++;
     requestAnimationFrame(draw);
   };
 //bg.onload = initdraw();
