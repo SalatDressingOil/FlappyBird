@@ -2,7 +2,10 @@
 //git add -A
 //git commit -m ""
 //git push
-Number.prototype.toGrad = function () { return this * 180/Math.PI; }
+
+var pi_180 = Math.PI/180
+var _180_pi = 180/Math.PI
+Number.prototype.toGrad = function () { return this * _180_pi; }
 
 var height_ = 0
 var width_ = 0
@@ -54,16 +57,13 @@ var gap = 186;
 var xPos = 20;
 var yPos = 150;
 
-var pi_180 = Math.PI/180
-
 var t1 = (new Date).getTime();
 var t2 = 0;
 var k = 0;
 var creat_board_int = 0;
 
-var z = 3;
 //var non = 10
-var schet = 1;
+
 var pixel_pipe_move = 3
 
 var zn = 0
@@ -87,7 +87,6 @@ document.addEventListener("keydown",moveUp);
 document.addEventListener("click",moveUp);
 var pipe = [];
 var particl = [];
-//setTimeout(vk_bridge_no_event_confin, 1);
 function initdraw(){
   zn_width = innerWidth/bg.width
   zn_height = innerHeight/bg.height
@@ -110,10 +109,7 @@ function initdraw(){
   grav *= zn
   min_Delta_yPos*=zn
   max_Delta_yPos*=zn
-  Delta_delta_yPos*=zn
-  z *= zn;
   //non *= zn
-  schet *= zn;
   pixel_pipe_move *= zn
   no_zero_img_size()
   pipe.push({
@@ -141,14 +137,12 @@ var Delta_yPos = 0
 var min_Delta_yPos = -8.5
 var max_Delta_yPos = 8.5
 
- var Delta_delta_yPos = 0
 var grav = 3;
 function moveUp(){
   if (!flag){
     console.log('click')
     //alert('click')
     Delta_yPos = max_Delta_yPos
-    Delta_delta_yPos = 0
     t1 = (new Date).getTime();
     schet = 15*zn;
     //non = 1*zn
@@ -159,10 +153,7 @@ function moveUp(){
     flag = false
     xPos = 20;
     yPos = 150;
-
-    schet = 1*zn;
     //non=10*zn
-    z=3*zn
     pipe = [];
     
     pipe[0]={
@@ -249,7 +240,6 @@ function draw(){
       ooo=Math.atan((yPos-prev_inter_bird_yPos)/(xPos-prev_inter_bird_xPos)).toGrad()
     }
     console.log(grav)
-    //console.log(t2,iter,Delta_yPos,yPos,Delta_delta_yPos)
 
     ctx.drawImage(fg,0,cvs.height - fg.height,fg.width,fg.height);
     //xPos=0
